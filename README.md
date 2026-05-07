@@ -199,25 +199,3 @@ Request:
 `GET /api/ai/recommendations` returns the top 5 job recommendations.
 
 `GET /api/ai/applications` returns recent generated/analyzed applications for the dashboard.
-
-## Deployment
-
-### Backend on Render
-
-1. Create a new Render Web Service.
-2. Set the root directory to `server`.
-3. Use build command `npm install`.
-4. Use start command `npm start`.
-5. Add environment variables from `server/.env.example`.
-6. Set `CLIENT_URL` to your Vercel frontend URL.
-
-### Frontend on Vercel
-
-1. Import the repository into Vercel.
-2. Set the root directory to `client`.
-3. Set `VITE_API_URL` to `https://your-render-service.onrender.com/api`.
-4. Deploy. `client/vercel.json` rewrites browser routes to the Vite app.
-
-## Screenshots
-
-Add product screenshots here after deploying or running locally.
