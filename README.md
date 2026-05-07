@@ -2,6 +2,10 @@
 
 HireSense AI is a full-stack job search and resume optimization platform. It combines authenticated candidate profiles, MongoDB-backed job discovery, resume parsing for PDF/DOCX files, Gemini-powered match analysis, tailored resume generation, personalized cover letters, skill-gap learning recommendations, and saved job tracking.
 
+<p align="center">
+  <img src="./landingPage.jpg" alt="HireSense AI Landing Page" width="100%" />
+</p>
+
 ## Features
 
 - JWT authentication with bcrypt password hashing
