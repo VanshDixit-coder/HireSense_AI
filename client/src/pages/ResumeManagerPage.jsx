@@ -10,6 +10,7 @@ export default function ResumeManagerPage() {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [parsing, setParsing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
 
@@ -33,16 +34,22 @@ export default function ResumeManagerPage() {
     try {
       setError('');
       setUploading(true);
+      setParsing(false);
       setProgress(0);
       const data = await resumeApi.upload(file, (event) => {
         const percent = event.total ? Math.round((event.loaded * 100) / event.total) : 50;
         setProgress(percent);
+        if (percent >= 100) {
+          setUploading(false);
+          setParsing(true);
+        }
       });
       setResume(data.resume);
     } catch (err) {
       setError(getErrorMessage(err, 'Unable to upload resume'));
     } finally {
       setUploading(false);
+      setParsing(false);
       setProgress(0);
     }
   };
@@ -72,7 +79,7 @@ export default function ResumeManagerPage() {
       </div>
       {error && <div className="mt-6 rounded-lg border border-red-400/30 bg-red-400/10 p-4 text-red-100">{error}</div>}
       <div className="mt-8">
-        <ResumeUploader onUpload={upload} uploading={uploading} progress={progress} />
+        <ResumeUploader onUpload={upload} uploading={uploading} parsing={parsing} progress={progress} />
       </div>
 
       {resume ? (
