@@ -17,6 +17,7 @@ export default function DashboardPage() {
   const [resources, setResources] = useState([]);
   const [modal, setModal] = useState(null);
   const [error, setError] = useState('');
+  const [deletingApplicationId, setDeletingApplicationId] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,6 +55,21 @@ export default function DashboardPage() {
     if (!applications.length) return 0;
     return Math.round(applications.reduce((sum, item) => sum + (item.matchScore || 0), 0) / applications.length);
   }, [applications]);
+
+  const deleteApplication = async (applicationId) => {
+    if (!window.confirm('Remove this application from your dashboard?')) return;
+
+    try {
+      setError('');
+      setDeletingApplicationId(applicationId);
+      await aiApi.deleteApplication(applicationId);
+      setApplications((items) => items.filter((item) => item._id !== applicationId));
+    } catch (err) {
+      setError(getErrorMessage(err, 'Unable to delete application'));
+    } finally {
+      setDeletingApplicationId('');
+    }
+  };
 
   if (loading) return <LoadingSpinner label="Loading dashboard" />;
 
@@ -126,6 +142,15 @@ export default function DashboardPage() {
                       <div className="flex flex-wrap gap-2">
                         {item.generatedResume && <button className="btn-secondary px-3 py-2" onClick={() => setModal({ title: 'Generated Resume', text: item.generatedResume })}>Resume</button>}
                         {item.generatedCoverLetter && <button className="btn-secondary px-3 py-2" onClick={() => setModal({ title: 'Cover Letter', text: item.generatedCoverLetter })}>Cover</button>}
+                        <button
+                          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-red-400/30 bg-red-400/10 text-xl font-bold leading-none text-red-200 transition hover:border-red-300 hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+                          onClick={() => deleteApplication(item._id)}
+                          disabled={deletingApplicationId === item._id}
+                          title="Delete application"
+                          aria-label={`Delete application for ${item.jobId?.title || 'this job'}`}
+                        >
+                          {deletingApplicationId === item._id ? '...' : 'X'}
+                        </button>
                       </div>
                     </td>
                   </tr>

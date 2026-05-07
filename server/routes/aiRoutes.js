@@ -5,7 +5,8 @@ const {
   generateCoverLetter,
   skillGap,
   recommendations,
-  applications
+  applications,
+  deleteApplication
 } = require('../controllers/aiController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -17,5 +18,6 @@ router.post('/generate-cover-letter', protect, generateCoverLetter);
 router.post('/skill-gap', protect, skillGap);
 router.get('/recommendations', protect, recommendations);
 router.get('/applications', protect, applications);
+router.delete('/applications/:id', protect, deleteApplication);
 
 module.exports = router;

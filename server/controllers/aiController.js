@@ -144,4 +144,20 @@ async function applications(req, res, next) {
   }
 }
 
-module.exports = { matchScore, generateResume, generateCoverLetter, skillGap, recommendations, applications };
+async function deleteApplication(req, res, next) {
+  try {
+    const application = await Application.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
+    if (!application) {
+      const error = new Error('Application not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    await User.findByIdAndUpdate(req.user._id, { $pull: { appliedJobs: application._id } });
+    res.json({ success: true, data: { deletedId: application._id } });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { matchScore, generateResume, generateCoverLetter, skillGap, recommendations, applications, deleteApplication };

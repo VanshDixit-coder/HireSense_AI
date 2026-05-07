@@ -6,5 +6,6 @@ export const aiApi = {
   generateCoverLetter: (jobId) => api.post('/ai/generate-cover-letter', { jobId }).then((res) => res.data.data),
   skillGap: (payload) => api.post('/ai/skill-gap', payload).then((res) => res.data.data),
   recommendations: () => api.get('/ai/recommendations').then((res) => res.data.data),
-  applications: () => api.get('/ai/applications').then((res) => res.data.data)
+  applications: () => api.get('/ai/applications').then((res) => res.data.data),
+  deleteApplication: (id) => api.delete(`/ai/applications/${id}`).then((res) => res.data.data)
 };
